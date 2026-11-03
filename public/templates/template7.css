@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Roboto+Condensed:wght@400;700&display=swap');
+
+#resume {
+  font-family: 'Roboto Condensed', sans-serif;
+  background: #0f172a;
+  color: #cbd5e1;
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  letter-spacing: 0.5px;
+}
+
+#resume h1 {
+  font-family: 'Fira Code', monospace;
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#resume h3 {
+  font-family: 'Fira Code', monospace;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin: 40px 0 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #334155;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#resume a {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+#resume ul {
+  padding-left: 25px;
+}
+
+#resume li {
+  margin: 10px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+}

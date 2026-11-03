@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+
+#resume {
+  font-family: 'Source Sans Pro', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  padding: 60px 50px;
+  max-width: 780px;
+  margin: 0 auto;
+  border: 8px solid white;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+}
+
+#resume h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #0f172a;
+}
+
+#resume h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 1.25rem;
+  color: #334155;
+  margin: 40px 0 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px double #cbd5e1;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+#resume a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+#resume ul {
+  padding-left: 30px;
+}
+
+#resume li {
+  margin: 10px 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}

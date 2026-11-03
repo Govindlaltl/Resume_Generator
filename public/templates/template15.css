@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Work+Sans:wght@400;500;600&display=swap');
+
+#resume {
+  font-family: 'Work Sans', sans-serif;
+  background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+  color: #574c4c;
+  padding: 60px 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+#resume h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #3c2a21;
+  letter-spacing: -1px;
+}
+
+#resume h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #6b4d3d;
+  margin: 40px 0 20px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #d4b996;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+#resume a {
+  color: #8b5a2b;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+#resume ul {
+  padding-left: 30px;
+}
+
+#resume li {
+  margin: 12px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  background: rgba(255,255,255,0.7);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid #c19a6b;
+}

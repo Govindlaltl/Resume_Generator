@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Powered Resume Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="account-bar">
+      <span>Signed in as <strong id="account-username">...</strong></span>
+      <button type="button" class="secondary-button" onclick="logoutAccount()">Log out</button>
+    </div>
+    <h1>🎓 AI-Powered Resume Generator</h1>
+
+    <!-- Upload Section -->
+    <div class="upload-section card">
+      <h2>📤 Upload Certificate</h2>
+      <input type="file" id="certFile" accept=".pdf,.jpg,.jpeg,.png" required />
+      <button onclick="uploadCertificate()">Upload Certificate</button>
+      <p id="uploadResult"></p>
+    </div>
+
+    <!-- View Resume Section -->
+    <div class="view-section card">
+      <h2>👀 View Resume</h2>
+      <button onclick="viewResume()">View My Resume</button>
+    </div>
+  </div>
+
+  <!-- Move resume-container OUTSIDE of .container -->
+  <div id="resume-container" class="resume-container" style="display: none;">
+    <div class="professional-resume">
+      <!-- Personal Details Section -->
+      <div class="section" id="section-personal">
+        <div class="section-header">
+          <h2 id="heading-personal" contenteditable="true">👤 Personal Details</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-personal')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <div class="personal-grid">
+            <div><strong>Full Name:</strong> <span id="edit-name" contenteditable="true">—</span></div>
+            <div><strong>Phone:</strong> <span id="edit-phone" contenteditable="true">—</span></div>
+            <div><strong>Email:</strong> <span id="edit-email" contenteditable="true">—</span></div>
+            <div><strong>Location:</strong> <span id="edit-location" contenteditable="true"></span></div>
+            <div><strong>LinkedIn:</strong> <span id="edit-linkedin" contenteditable="true"></span></div>
+            <div><strong>GitHub:</strong> <span id="edit-github" contenteditable="true"></span></div>
+          </div>
+          <div class="summary-box">
+            <label for="edit-target-career"><strong>Target career / role:</strong></label>
+            <input id="edit-target-career" type="text" maxlength="120" placeholder="For example: AI developer, civil engineer, physician">
+            <strong id="heading-objective" contenteditable="true">Career Objective:</strong>
+            <textarea id="edit-summary" placeholder="Enter your target career above, then regenerate the objective..."></textarea>
+            <button onclick="regenerateSection('summary', 'edit-summary')" class="regenerate-btn">🔄 Regenerate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Section -->
+      <div class="section" id="section-education">
+        <div class="section-header">
+          <h2 id="heading-education" contenteditable="true">🎓 Education</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-education')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <textarea id="edit-education" placeholder="Education institution"></textarea>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="section" id="section-skills">
+        <div class="section-header">
+          <h2 id="heading-skills" contenteditable="true">🛠️ Skills</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-skills')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <textarea id="edit-skills" placeholder="Generated from readable certificate text..."></textarea>
+        </div>
+      </div>
+
+      <!-- Projects Section -->
+      <div class="section" id="section-projects">
+        <div class="section-header">
+          <h2 id="heading-projects" contenteditable="true">🧪 Projects</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-projects')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <label for="project-details"><strong>Project notes for AI:</strong></label>
+          <textarea id="project-details" rows="5" placeholder="Describe your project, your role, technologies, key features, and results. Add as many projects as needed."></textarea>
+          <button onclick="regenerateSection('projects', 'edit-projects')" class="regenerate-btn">🔄 Regenerate Project Description</button>
+          <small>Click Regenerate again for another wording. The AI will keep the facts from your notes.</small>
+          <textarea id="edit-projects" placeholder="Your resume-ready project description will appear here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Work Experience Section -->
+      <div class="section" id="section-experience">
+        <div class="section-header">
+          <h2 id="heading-experience" contenteditable="true">💼 Experience & Training</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-experience')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <textarea id="edit-experience" placeholder="Training shown by your certificate evidence will appear here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Achievements Section -->
+      <div class="section" id="section-achievements">
+        <div class="section-header">
+          <h2 id="heading-achievements" contenteditable="true">🏅 Achievements & Certifications</h2>
+          <div class="section-actions">
+            <button onclick="deleteSection('section-achievements')" class="delete-btn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="editable-content">
+          <textarea id="edit-achievements" placeholder="Your uploaded certificate names and related achievements will appear here..."></textarea>
+        </div>
+        <div class="certificates-links">
+          <h4>📜 Uploaded Certificates:</h4>
+          <ul id="certificates-list"></ul>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button onclick="saveChanges()" class="action-btn save-btn">💾 Save Resume</button>
+        <button onclick="addResumeSection()" class="action-btn edit-btn">➕ Add Section</button>
+        <button onclick="downloadPDF()" class="action-btn download-btn">📥 Download PDF</button>
+        <!-- Removed Edit button as requested -->
+        <!-- <button onclick="toggleEditMode()" class="action-btn edit-btn">✏️ Toggle Edit Mode</button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ CHATBOT UI -->
+  <button id="openChatBtn" class="chat-toggle-btn">💬 AI Assistant</button>
+
+  <div id="chatbotContainer" class="chatbot-container">
+    <div class="chatbot-header">
+      <h3>Resume AI Assistant</h3>
+      <button id="closeChatBtn" class="close-btn">×</button>
+    </div>
+    <div class="chatbot-body">
+      <div id="chatMessages" class="chat-messages">
+        <div class="message bot">Hi! I can help you write resume content. Try asking:<br>
+          “Write a summary for a frontend developer with 3 years experience”<br>
+          “Suggest 5 technical skills for data analyst”
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Ask me anything..." />
+        <button id="sendBtn">Send</button>
+      </div>
+      <div class="copy-tip">Use “Copy answer” to copy an AI reply.</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Resume</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+    <div class="controls">
+  <select id="templateSelect" onchange="applyTemplate()">
+    <option value="default">Select Template</option>
+    <option value="template1">Minimalist</option>
+    <option value="template2">Modern Pro</option>
+    <option value="template3">Creative Edge</option>
+    <option value="template4">Corporate Blue</option>
+    <option value="template5">Dark Mode</option>
+    <option value="template6">Academic</option>
+    <option value="template7">Tech Bold</option>
+    <option value="template8">Elegant Serif</option>
+    <option value="template9">Color Pop</option>
+    <option value="template10">Executive</option>
+    <option value="template11">Startup Ready</option>
+    <option value="template12">UX Designer</option>
+    <option value="template13">Data Scientist</option>
+    <option value="template14">Intern Magnet</option>
+    <option value="template15">CEO Aspirant</option>
+  </select>
+</div>
+
+  <div class="resume-container" id="resume">
+    <h1>Loading resume...</h1>
+  </div>
+  
+  <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+  <script src="script.js"></script>
+  <script>
+    window.onload = loadResume;
+  </script>
+</body>
+</html>

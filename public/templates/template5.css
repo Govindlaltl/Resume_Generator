@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+#resume {
+  font-family: 'Manrope', sans-serif;
+  background: #1a1a1a;
+  color: #e2e8f0;
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#resume h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #f7fafc;
+}
+
+#resume h3 {
+  font-size: 1.2rem;
+  color: #a0aec0;
+  border-bottom: 1px solid #4a5568;
+  padding-bottom: 8px;
+  margin: 35px 0 15px;
+  font-weight: 600;
+}
+
+#resume a {
+  color: #68d391;
+  font-weight: 500;
+}
+
+#resume ul {
+  padding-left: 25px;
+}
+
+#resume li {
+  margin: 10px 0;
+  line-height: 1.5;
+}

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap');
+
+#resume {
+  font-family: 'Montserrat', sans-serif;
+  background: #fffaf7;
+  color: #3d2b1f;
+  padding: 60px 50px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+#resume h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #5d4037;
+  letter-spacing: -1px;
+}
+
+#resume h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: #795548;
+  margin: 40px 0 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+#resume a {
+  color: #8d6e63;
+  font-weight: 500;
+}
+
+#resume ul {
+  padding-left: 20px;
+}
+
+#resume li {
+  margin: 10px 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

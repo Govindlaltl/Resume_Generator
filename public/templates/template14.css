@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+#resume {
+  font-family: 'Quicksand', sans-serif;
+  background: #fffbeb;
+  color: #92400e;
+  padding: 50px;
+  max-width: 760px;
+  margin: 0 auto;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(251,191,36,0.15);
+}
+
+#resume h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #ea580c;
+  letter-spacing: -0.5px;
+}
+
+#resume h3 {
+  font-size: 1.25rem;
+  color: #f59e0b;
+  margin: 35px 0 15px;
+  padding: 8px 15px;
+  background: #fef3c7;
+  border-radius: 12px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+#resume a {
+  color: #d97706;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+#resume ul {
+  padding-left: 25px;
+}
+
+#resume li {
+  margin: 12px 0;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #fcd34d;
+  font-weight: 500;
+}

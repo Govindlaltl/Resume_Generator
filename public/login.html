@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in | Resume Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <h1>Resume Generator</h1>
+    <p class="auth-intro">Sign in or create an account to continue.</p>
+
+    <section id="login-panel">
+      <h2>Welcome back</h2>
+      <form id="login-form">
+        <label for="login-identifier">Username or email</label>
+        <input id="login-identifier" name="identifier" autocomplete="username" required>
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Log in</button>
+      </form>
+      <p class="auth-switch">New here? <button type="button" class="text-button" data-show="signup">Create an account</button></p>
+    </section>
+
+    <section id="signup-panel" hidden>
+      <h2>Create your account</h2>
+      <form id="signup-form">
+        <label for="signup-name">Full name</label>
+        <input id="signup-name" name="name" maxlength="100" autocomplete="name" required>
+        <label for="signup-username">Username</label>
+        <input id="signup-username" name="username" minlength="3" maxlength="50" autocomplete="username" required>
+        <label for="signup-email">Email</label>
+        <input id="signup-email" name="email" type="email" maxlength="254" autocomplete="email" required>
+        <label for="signup-password">Password</label>
+        <input id="signup-password" name="password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+        <p class="password-hint">Use at least 8 characters.</p>
+        <button type="submit">Create account</button>
+      </form>
+      <p class="auth-switch">Your email connects your account to an existing student record when one matches. Already registered? <button type="button" class="text-button" data-show="login">Log in</button></p>
+    </section>
+    <p id="auth-message" class="auth-message" role="status" aria-live="polite"></p>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

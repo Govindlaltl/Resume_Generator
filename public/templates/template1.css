@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+#resume {
+  font-family: 'Inter', sans-serif;
+  background: white;
+  color: #333;
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+#resume h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+#resume h3 {
+  font-size: 1.2rem;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  margin: 30px 0 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#resume a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+#resume a:hover {
+  text-decoration: underline;
+}
+
+#resume ul {
+  padding-left: 20px;
+}
+
+#resume li {
+  margin: 8px 0;
+}

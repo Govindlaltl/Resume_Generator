@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
+
+#resume {
+  font-family: 'Roboto', sans-serif;
+  background: #f0fdf4;
+  color: #1f7a4f;
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+#resume h1 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #15803d;
+}
+
+#resume h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.15rem;
+  color: #16a34a;
+  margin: 35px 0 15px;
+  padding-left: 15px;
+  border-left: 5px solid #4ade80;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+#resume a {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+#resume ul {
+  padding-left: 30px;
+}
+
+#resume li {
+  margin: 10px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.92rem;
+  background: #ecfdf5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #22c55e;
+}
