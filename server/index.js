@@ -60,13 +60,16 @@ app.use('/api', aiRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/resume', require('./routes/resume'));
 
-app.use('/uploads', requireAuth, express.static(path.join(__dirname, 'uploads')));
+const UPLOADS_DIR = process.env.UPLOADS_DIR ||
+  path.join(__dirname, '../uploads');
+
+app.use('/uploads', requireAuth, express.static(UPLOADS_DIR));
 app.use(express.static(path.join(__dirname, '../public'), { index: false }));
 
 db.initializeDatabase
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch(error => {

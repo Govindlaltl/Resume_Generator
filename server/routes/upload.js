@@ -1,87 +1,120 @@
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const fsp = require('fs').promises;
 const pdf = require('pdf-parse');
+
 const db = require('../db');
 const { extractImageText } = require('../services/ocrService');
 
 const router = express.Router();
 
-// ✅ Ensure uploads directory exists
-const UPLOADS_DIR = 'uploads';
+// Use the same upload directory locally and on Render
+const UPLOADS_DIR = process.env.UPLOADS_DIR ||
+  path.join(__dirname, '../../uploads');
+
+// Ensure upload directory exists
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
-// Configure Multer Storage
+// Configure Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
   },
+
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    const uniqueSuffix =
+      Date.now() + '-' + Math.round(Math.random() * 1E9);
+
+    const extension = path.extname(file.originalname).toLowerCase();
+
+    cb(null, file.fieldname + '-' + uniqueSuffix + extension);
   }
 });
 
-// ✅ Add file validation
+// File upload configuration
 const upload = multer({
-  storage: storage,
+  storage,
+
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024
   },
+
   fileFilter: (req, file, cb) => {
-    // Allow PDFs and images
-    const allowedMimes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
+    const allowedMimes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png'
+    ];
+
     if (!allowedMimes.includes(file.mimetype)) {
-      return cb(new Error('Only PDF and image files are allowed'), false);
+      const error = new Error(
+        'Only PDF, JPG and PNG files are allowed'
+      );
+      error.status = 400;
+      return cb(error);
     }
+
     cb(null, true);
   }
 });
 
-// ✅ Extract text from PDF
+// Extract text from PDF
 async function extractPDFText(filePath) {
   try {
-    console.log(`📄 Attempting to extract text from: ${filePath}`);
     const pdfBuffer = await fsp.readFile(filePath);
     const pdfData = await pdf(pdfBuffer);
-    const extractedText = pdfData.text.substring(0, 5000).trim(); // Limit to 5000 chars
-    console.log(`✅ Successfully extracted ${extractedText.length} characters`);
-    return extractedText;
+
+    return pdfData.text.substring(0, 5000).trim();
+
   } catch (error) {
-    console.warn(`⚠️ PDF text extraction failed for ${filePath}:`, error.message);
-    return `Text extraction failed for this file. Filename: ${path.basename(filePath)}`;
+    console.warn('PDF extraction failed:', error.message);
+
+    return `Text extraction failed. Filename: ${path.basename(filePath)}`;
   }
 }
 
-// ✅ Main upload route
+// Upload certificate
 router.post('/', upload.single('certificate'), async (req, res) => {
   const file = req.file;
 
   if (!file) {
-    return res.status(400).json({ error: 'No file uploaded' });
+    return res.status(400).json({
+      success: false,
+      error: 'No file uploaded'
+    });
   }
 
   try {
-    const studentId = req.user.studentId;
+    const studentId = req.user?.studentId;
 
-    // ✅ Extract text if PDF
+    if (!studentId) {
+      throw new Error('Student account not found');
+    }
+
+    // Extract text
     let extractedText = `Uploaded file: ${file.originalname}`;
+
     if (file.mimetype === 'application/pdf') {
       extractedText = await extractPDFText(file.path);
     } else if (file.mimetype.startsWith('image/')) {
       extractedText = await extractImageText(file.path);
+
       if (!extractedText) {
-        const error = new Error('No text could be read from this image. Try a clearer, well-lit certificate image.');
+        const error = new Error(
+          'No text could be read from this image. Try a clearer image.'
+        );
+
         error.status = 422;
         throw error;
       }
     }
 
-    // ✅ Insert certificate record with extracted text
+    // Save certificate information in MySQL
     const certData = {
       student_id: studentId,
       file_path: file.filename,
@@ -91,53 +124,68 @@ router.post('/', upload.single('certificate'), async (req, res) => {
     };
 
     const result = await new Promise((resolve, reject) => {
-      db.query('INSERT INTO certificates SET ?', certData, (err, insertResult) => {
-        if (err) reject(err);
-        else resolve(insertResult);
-      });
+      db.query(
+        'INSERT INTO certificates SET ?',
+        certData,
+        (err, insertResult) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(insertResult);
+          }
+        }
+      );
     });
 
-    // ✅ SUCCESS RESPONSE with text preview
+    // Successful response
     res.status(201).json({
       success: true,
-      message: '✅ Certificate uploaded and processed successfully!',
+      message: 'Certificate uploaded successfully',
       fileId: result.insertId,
-      url: `/uploads/${file.filename}`,
+      url: `/uploads/${encodeURIComponent(file.filename)}`,
       originalName: file.originalname,
-      textPreview: extractedText.substring(0, 200) + (extractedText.length > 200 ? '...' : ''),
+      textPreview:
+        extractedText.substring(0, 200) +
+        (extractedText.length > 200 ? '...' : ''),
       mimeType: file.mimetype
     });
 
   } catch (error) {
-    console.error("🔥 Upload Error:", error);
+    console.error('Upload error:', error);
 
-    // ✅ Cleanup: Delete uploaded file if something went wrong
-    if (req.file?.path && fs.existsSync(req.file.path)) {
-      try {
-        await fsp.unlink(req.file.path);
-        console.log('🗑️ Cleaned up failed upload:', req.file.filename);
-      } catch (cleanupError) {
-        console.warn('⚠️ Failed to cleanup file:', cleanupError.message);
+    // Remove file if processing or database insertion fails
+    try {
+      await fsp.unlink(file.path);
+    } catch (cleanupError) {
+      if (cleanupError.code !== 'ENOENT') {
+        console.warn('File cleanup failed:', cleanupError.message);
       }
     }
 
     res.status(error.status || 500).json({
       success: false,
-      error: 'Server error during upload',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: error.status ? error.message : 'Server error during upload'
     });
   }
 });
 
-// ✅ Serve uploaded files
-router.get('/uploads/:filename', (req, res) => {
-  const filePath = path.join(__dirname, '../uploads', req.params.filename);
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error('File serving error:', err);
-      res.status(404).json({ error: 'File not found' });
-    }
-  });
+// Handle Multer errors
+router.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+
+  if (error.status) {
+    return res.status(error.status).json({
+      success: false,
+      error: error.message
+    });
+  }
+
+  next(error);
 });
 
 module.exports = router;
